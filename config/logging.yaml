@@ -1,0 +1,72 @@
+verson: 1
+
+# config format hiển thị của log. Ví dụ: [2026-01-15 12:00:00] INFO: - ingestion - Loaded 152 records
+formatters:
+  simple:
+    format: '[%(asctime)s] %(levelname)s: - %(name)s - %(message)s'
+    # trong đó: asctime là thời gian
+    # levelname là mức độ log (INFO, ERROR,...)
+    # name là tên logger (ví dụ: ingestion)
+    # message là nội dung log
+    datefmt: '%Y-%m-%d %H:%M:%S'  # định dạng thời gian
+
+# Cấu hình console
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: simple
+    level: INFO
+    stream: ext://sys.stdout  # ghi log ra console
+
+  file:
+    class: logging.FileHandler
+    formatter: simple
+    level: INFO
+    filename: logs/application.log  # đường dẫn file log
+
+# Cấu hình logger cho từng module
+loggers:
+  ingestion:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+
+  embedding:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+
+  scoring:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+
+  vector_database:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+
+  llm:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+
+  retrieval:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+  
+  reranking:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+
+  chat:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+  
+# Cấu hình logger mặc định
+root:
+  level: INFO
+  handlers: [console, file]

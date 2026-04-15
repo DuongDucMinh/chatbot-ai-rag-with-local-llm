@@ -1,0 +1,55 @@
+# config application
+app:
+  name: chatbot-ai-app
+  version: 1.0.0
+  env: production
+
+# config data path
+data:
+  raw_dir: /data/raw
+  processed_dir: /data/processed
+
+# chunking
+chunking:
+  chunk_size: 512 # số token mỗi chunk
+  chunk_overlap: 50 # số token overlap giữa các chunk
+
+# embedding
+embedding:
+  model: intfloat/multilingual-e5-small # model hỗ trợ tiếng việt tốt, nhẹ
+  batch_size: 64
+  device: cpu
+
+# vector database stored chunk + embedding
+vector_database:
+  type: qrant
+  host: localhost
+  port: 6333
+  url: http://localhost:6333 # optional, ưu tiên url nếu có
+  api_key: null # nếu dùng qdrant cloud
+  collection_name: chatbot_collection
+  distance: cosine
+  vector_size: 384 # kích thước embedding của model intfloat/multilingual-e5-small
+  timeout: 30 # timeout cho các request đến vector database, ngắt kết nối nếu quá thời gian này
+
+# config model LLM
+llm:
+  provider: ollama
+  model: qwen2.5:3b
+  base_url: http://localhost:11434 # URL của Ollama server
+  temperature: 0.2
+  max_tokens: 1024
+  timeout: 60
+
+# config RAG
+retrieval:
+  top_k: 10
+  score_threshold: 0.5 # sau khi tính cosine similarity, chỉ lấy những chunk có điểm số cao hơn ngưỡng này
+  dense_weight: 0.7 # trong hybrid retriever, trọng số của dense retriever
+  sparse_weight: 0.3 #  trong hybrid retriever, trong so cua bm25 retriever
+
+# config reranking
+reranking:
+  model: cross-encoder/ms-marco-MiniLM-L-6-v2  # CrossEncoder model for reranking
+  device: cpu # cpu or cuda
+  top_k: 5 # số lượng chunk sau khi reranking để đưa vào LLM
