@@ -6,8 +6,8 @@ app:
 
 # config data path
 data:
-  raw_dir: /data/raw
-  processed_dir: /data/processed
+  raw_dir: data/raw
+  processed_dir: data/processed
 
 # chunking
 chunking:

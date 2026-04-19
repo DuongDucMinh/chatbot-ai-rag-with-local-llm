@@ -1,4 +1,4 @@
-verson: 1
+version: 1
 
 # config format hiển thị của log. Ví dụ: [2026-01-15 12:00:00] INFO: - ingestion - Loaded 152 records
 formatters:

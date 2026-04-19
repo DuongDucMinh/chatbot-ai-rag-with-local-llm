@@ -2,7 +2,7 @@ import yaml
 import os
 
 def load_settings():
-    with open("config/settings.yaml", "r") as file:
+    with open("config/settings.yaml", "r", encoding="utf-8") as file:
         settings = yaml.safe_load(file)
     
     # Override với environment variable
@@ -56,3 +56,5 @@ def load_settings():
         settings["reranking"]["device"] = os.getenv("RERANKING_DEVICE")
     if os.getenv("RERANKING_TOP_K"):
         settings["reranking"]["top_k"] = int(os.getenv("RERANKING_TOP_K")) 
+
+    return settings
