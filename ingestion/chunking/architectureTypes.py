@@ -8,12 +8,13 @@ from core.load_settings import load_settings
 from core.setup_logging import setup_logging
 
 setting = load_settings()
-setup_logging()
+# setup_logging()
 logger = logging.getLogger("ingestion")
 
 def chunk_architecture_types():
-    file_path = Path(setting["data"]["processed_dir"]) / "architecture_types.json"
+    file_path = Path(setting["data"]["processed_dir"] / "architectureTypes.json")
 
+    # Nếu đường dẫn file không tồn tại
     if not file_path.exists():
         logger.error(f"Input file not found: {file_path}")
         return []
@@ -26,6 +27,7 @@ def chunk_architecture_types():
         logger.error(f"Error processing architecture types: {e}")
         return []
     
+    # nếu trong bảng không có dữ liệu
     if not data:
         logger.warning(f"No architecture types found in {file_path}")
         return []
@@ -47,7 +49,7 @@ def chunk_architecture_types():
         architecture_id = architecture_type.get("id")
         architecture_name = architecture_type.get("name", "")
         architecture_slug = architecture_type.get("slug", "")
-        architecture_description = architecture_type.get("description") # có cũng được, không có không sao
+        architecture_description = architecture_type.get("description", "") # có cũng được, không có không sao
         architecture_imageUrl = architecture_type.get("imageUrl", "")
 
         # kiểm tra xem có name không và có phải là string không
@@ -69,12 +71,12 @@ def chunk_architecture_types():
             "text": "\n".join(main_text),
             "metadata": {
                 "type": "architecture_type",
-                "source": "architecture_types.json",
+                "source": "architectureTypes.json",
                 "architecture_id": architecture_id,
                 "architecture_name": architecture_name,
                 "architecture_slug": architecture_slug,
                 "architecture_description": architecture_description,
-                "architecture_imageUrl": architecture_imageUrl,
+                "architecture_image_url": architecture_imageUrl,
             }
         })
 
