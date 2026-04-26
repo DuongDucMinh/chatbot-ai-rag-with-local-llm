@@ -2,14 +2,10 @@ import json
 import logging
 from pathlib import Path
 
-from core.load_settings import load_settings
-from core.setup_logging import setup_logging
-
-setting = load_settings()
 logger = logging.getLogger("ingestion")
 
-def chunk_hero_slides():
-    file_path = Path(setting["data"]["processed_dir"] / "heroSlides.json")
+def chunk_hero_slides(setting):
+    file_path = Path(setting["data"]["processed_dir"]) / "heroSlides.json"
 
     if not file_path.exists():
         logger.error(f"Input file not found: {file_path}")
@@ -18,8 +14,11 @@ def chunk_hero_slides():
         with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
             logger.info(f"Successfully loaded data from {file_path}")
-    except json.JSONDecodeError:
-        logger.error(f"Invalid JSON in file: {file_path}")
+    except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error in {file_path}: {e}") # nếu file json bị lỗi định dạng thì sẽ log lỗi 
+        return []
+    except Exception as e:
+        logger.error(f"Error processing hero slides: {e}")
         return []
     
     if not data:

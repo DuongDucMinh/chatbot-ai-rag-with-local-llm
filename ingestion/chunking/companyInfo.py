@@ -2,15 +2,10 @@ import json
 import logging
 from pathlib import Path
 
-from core.load_settings import load_settings
-from core.setup_logging import setup_logging
-
-setting = load_settings()
-# setup_logging()
 logger = logging.getLogger("ingestion")
 
-def chunk_company_info():
-    file_path = Path(setting["data"]["processed_dir"] / "companyInfo.json") # str -> Path
+def chunk_company_info(setting):
+    file_path = Path(setting["data"]["processed_dir"]) / "companyInfo.json" # str -> Path
 
     # Nếu đường dẫn file không tồn tại
     if not file_path.exists():
@@ -21,6 +16,9 @@ def chunk_company_info():
         with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
             logger.info(f"Successfully loaded data from {file_path}")
+    except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error in {file_path}: {e}") # nếu file json bị lỗi định dạng thì sẽ log lỗi 
+        return []
     except Exception as e:
         logger.error(f"Error processing company info: {e}")
         return []
